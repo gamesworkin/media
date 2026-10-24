@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Converter Studio - Client-side FFmpeg</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo-area">
+                <div class="logo-icon">⚡</div>
+                <div>
+                    <h1>Media Converter Studio</h1>
+                    <p class="subtitle">Conversor local seguro • 100% Client-Side via WebAssembly</p>
+                </div>
+            </div>
+            <div id="statusBadge" class="status-badge loading">
+                <span class="status-dot"></span>
+                <span id="statusText">Inicializando FFmpeg Engine...</span>
+            </div>
+        </header>
+
+        <!-- Main Card -->
+        <main class="main-card">
+            <!-- Drop Zone -->
+            <div class="drop-zone" id="dropZone">
+                <input type="file" id="fileInput" class="file-input" accept="video/*,audio/*,image/*">
+                <div class="drop-zone-content">
+                    <div class="upload-icon">📁</div>
+                    <h3>Arraste e solte seu arquivo aqui</h3>
+                    <p>ou <span class="browse-btn">clique para navegar</span></p>
+                    <p class="format-info">Suporta Vídeo (MP4, MKV, AVI, MOV, WEBM), Áudio (MP3, WAV, AAC, OGG, FLAC) e Imagens (PNG, JPG, WEBP, GIF)</p>
+                </div>
+            </div>
+
+            <!-- File Selected Banner -->
+            <div id="fileInfo" class="file-info hidden">
+                <div class="file-details">
+                    <span class="file-icon" id="fileIcon">📄</span>
+                    <div>
+                        <h4 id="fileName">nome_do_arquivo.mp4</h4>
+                        <span id="fileSize" class="file-size">0 MB</span>
+                    </div>
+                </div>
+                <button id="removeFileBtn" class="btn-icon" title="Remover arquivo">✕</button>
+            </div>
+
+            <!-- Options Form -->
+            <div id="optionsSection" class="options-section hidden">
+                <div class="form-group">
+                    <label for="outputFormat">Formato de Saída Desejado</label>
+                    <select id="outputFormat" class="custom-select">
+                        <!-- Options filled dynamically by JS based on input type -->
+                    </select>
+                </div>
+
+                <div class="form-group hidden" id="presetGroup">
+                    <label for="qualityPreset">Qualidade / Velocidade</label>
+                    <select id="qualityPreset" class="custom-select">
+                        <option value="ultrafast">Ultrarrápido (Tamanho Maior)</option>
+                        <option value="medium" selected>Padrão Equilibrado</option>
+                        <option value="veryslow">Máxima Compressão (Mais Lento)</option>
+                    </select>
+                </div>
+
+                <button id="convertBtn" class="btn-primary" disabled>
+                    <span id="btnText">Converter Agora</span>
+                </button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div id="progressSection" class="progress-section hidden">
+                <div class="progress-header">
+                    <span id="progressStatus">Processando mídia...</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div id="progressBar" class="progress-bar-fill"></div>
+                </div>
+                <div class="log-box" id="logBox">
+                    <div class="log-entry system">> Inicializando motor FFmpeg.wasm...</div>
+                </div>
+            </div>
+
+            <!-- Download Result -->
+            <div id="resultSection" class="result-section hidden">
+                <div class="success-icon">🎉</div>
+                <h3>Conversão Concluída!</h3>
+                <p>Seu arquivo foi processado com sucesso no seu navegador.</p>
+                <div class="action-buttons">
+                    <a id="downloadBtn" class="btn-success" download>⬇️ Baixar Arquivo Convertido</a>
+                    <button id="resetBtn" class="btn-secondary">Converter Outro Arquivo</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer Notice -->
+        <footer class="app-footer">
+            <p>🔒 <strong>Privacidade Garantida:</strong> Seus arquivos nunca saem do seu computador ou celular. Todo o processamento é feito pela sua própria CPU/RAM.</p>
+        </footer>
+    </div>
+
+    <!-- Load Single-thread FFmpeg Core (No SharedArrayBuffer / Headers required) -->
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
